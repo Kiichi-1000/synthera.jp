@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #ffffff;
+  --color-paper: #f5f3f0;
+  --color-ink: #0a0a0a;
+  --color-muted: #6c6864;
+  --color-line: rgba(10, 10, 10, 0.07);
+  --color-surface: rgba(255, 255, 255, 0.92);
+  --color-accent: #8a6e51;
+  --color-accent-soft: #ae8e6e;
+  --color-accent-pale: #f0e8de;
+  --color-glow: rgba(174, 142, 110, 0.12);
+  --radius-app: 1.5rem;
+  --radius-pill: 9999px;
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-app: 0 1px 3px rgba(0, 0, 0, 0.03), 0 6px 20px rgba(0, 0, 0, 0.06);
+  --shadow-app-lg: 0 2px 8px rgba(0, 0, 0, 0.05), 0 20px 48px rgba(0, 0, 0, 0.09);
+  --shadow-inner-glow: inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-white text-[var(--color-ink)];
+  }
+  ::selection {
+    background: rgba(138, 110, 81, 0.14);
+    color: var(--color-ink);
+  }
+}
+
+/* ─── 背景 — ごく控えめなウォームグラデーション ─── */
+.mesh-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 0%, rgba(174, 142, 110, 0.06), transparent 55%),
+    radial-gradient(ellipse 55% 45% at 100% 5%, rgba(174, 142, 110, 0.04), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% 110%, rgba(210, 200, 188, 0.04), transparent 55%);
+  animation: mesh-drift 45s ease-in-out infinite alternate;
+}
+.mesh-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgba(10, 10, 10, 0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.012) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 100% 80% at 50% 20%, black 20%, transparent);
+}
+
+@keyframes mesh-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(1.5%, 2.5%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mesh-bg::before {
+    animation: none;
+  }
+}
+
+/* ─── カード ─── */
+.app-card {
+  border-radius: var(--radius-app);
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-app), var(--shadow-inner-glow);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
+}
+.app-card:hover {
+  box-shadow: var(--shadow-app-lg), var(--shadow-inner-glow);
+  border-color: rgba(10, 10, 10, 0.1);
+}
+
+.app-card-solid {
+  border-radius: var(--radius-app);
+  border: 1px solid var(--color-line);
+  background: #ffffff;
+  box-shadow: var(--shadow-app);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.app-card-solid:hover {
+  box-shadow: var(--shadow-app-lg);
+}
+
+/* ─── テキストシマー ─── */
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+.text-shimmer {
+  background: linear-gradient(
+    108deg,
+    var(--color-ink) 0%,
+    var(--color-ink) 35%,
+    var(--color-accent-soft) 46%,
+    var(--color-accent) 50%,
+    var(--color-accent-soft) 54%,
+    var(--color-ink) 65%,
+    var(--color-ink) 100%
+  );
+  background-size: 230% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 11s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .text-shimmer {
+    animation: none;
+    color: var(--color-ink);
+    background: none;
+    -webkit-text-fill-color: inherit;
+  }
+}
+
+/* ─── フローティングオーブ ─── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(96px);
+  opacity: 0.22;
+  animation: orb-float 22s ease-in-out infinite;
+}
+.hero-orb-2 {
+  animation-delay: -8s;
+  animation-duration: 28s;
+}
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(2%, -2%) scale(1.03);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-orb {
+    animation: none;
+  }
+}
+
+/* ─── スクロールヒント ─── */
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.85;
+  }
+}
+.animate-scroll-hint {
+  animation: scroll-hint 2.5s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-hint {
+    animation: none;
+  }
+}
+
+/* ─── ユーティリティ ─── */
+.label-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  box-shadow: var(--shadow-xs);
+}
+
+.section-hero {
+  background: linear-gradient(to bottom, var(--color-paper), white);
+}
+
+/* ─── ページヒーロー共通 ─── */
+.page-hero-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-accent-soft) 30%,
+    var(--color-line) 70%,
+    transparent
+  );
+}
