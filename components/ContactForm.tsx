@@ -17,7 +17,7 @@ const categories = [
 
 const fieldClass =
   "mt-3 w-full rounded-xl border border-[var(--color-line)] bg-white/80 px-4 py-3.5 text-[var(--color-ink)] shadow-sm outline-none transition placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)]/40 focus:ring-2 focus:ring-[var(--color-accent)]/15";
-const contactEndpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "";
+const contactEndpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -45,12 +45,6 @@ export function ContactForm() {
       setErrorMessage("必須項目を入力してください。");
       return;
     }
-    if (!contactEndpoint) {
-      setStatus("error");
-      setErrorMessage("現在フォーム送信は停止中です。contact@synthera.jp までご連絡ください。");
-      return;
-    }
-
     try {
       const res = await fetch(contactEndpoint, {
         method: "POST",
