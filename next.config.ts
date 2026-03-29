@@ -1,17 +1,17 @@
 import type { NextConfig } from "next";
 
-const isGitHubActions = process.env.GITHUB_ACTIONS === "true";
+const isStaticExport = process.env.STATIC_EXPORT === "true";
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/")[1] ?? "";
 const isUserPagesRepository = repositoryName.endsWith(".github.io");
 const defaultBasePath =
-  isGitHubActions && repositoryName && !isUserPagesRepository
+  isStaticExport && repositoryName && !isUserPagesRepository
     ? `/${repositoryName}`
     : "";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? defaultBasePath;
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: isGitHubActions ? "export" : undefined,
+  output: isStaticExport ? "export" : undefined,
   trailingSlash: true,
   images: {
     unoptimized: true,
