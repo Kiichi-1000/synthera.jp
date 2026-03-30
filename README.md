@@ -49,3 +49,24 @@ npm run build
 ```
 
 `Route (app)` に `ƒ /api/contact` が表示されればサーバーAPIが有効です。
+
+## Cloudflare Pages での設定（`synthera-jp.pages.dev`）
+
+Cloudflare側が `build_command` / `destination_dir` 空欄だと 404 になりやすいため、以下で固定してください。
+
+- Framework preset: `None`
+- Build command: `npm run build:cf`
+- Build output directory: `.vercel/output/static`
+- Root directory: 空欄（リポジトリルート）
+
+環境変数（Cloudflare Pages > Settings > Environment variables）:
+
+- `RESEND_API_KEY`
+- `CONTACT_TO`
+- `RESEND_FROM`（任意）
+
+**CSS/JS が 404・真っ白になる場合（重要）**
+
+- Cloudflare ではビルド時に `CF_PAGES=1` が付与され、`next.config.ts` 側で **GitHub Project Pages 用の `basePath`（`/リポジトリ名`）を付けない**ようにしています。
+- Cloudflare の環境変数に **`NEXT_PUBLIC_BASE_PATH` を手動で入れている**と、同様にアセットパスがずれます。**不要なら削除**するか、空に近い値にしないでください（未設定でルート配信）。
+- 変更後は **Clear build cache and deploy** を実行してください。

@@ -1,6 +1,8 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "edge";
+
 const CONTACT_TO = process.env.CONTACT_TO || "synthera.2025@gmail.com";
 const RESEND_FROM =
   process.env.RESEND_FROM || "Synthera Website <onboarding@resend.dev>";
